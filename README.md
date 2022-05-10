@@ -6,7 +6,7 @@ Class '22 Capstone Project
 *Description: This is the tool RAPTOR(Ranking Advanced Persistent Threat Ontological Report.
 *             It is used to programmatically use MITRE's Data to narrow suspects.
 *Date: 5/10/2022
-*Github: 
+*Github: https://github.com/redbeardmeric/APTAnalyzer.git
 ************************************************************************************************************
 
 

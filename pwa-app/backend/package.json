@@ -1,0 +1,52 @@
+{
+  "name": "raptor-backend",
+  "version": "2.0.0",
+  "description": "RAPTOR Backend API - MITRE ATT&CK Analysis Tool",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "db:init": "tsx src/scripts/initDb.ts",
+    "db:update": "tsx src/scripts/updateData.ts"
+  },
+  "keywords": [
+    "mitre",
+    "attack",
+    "apt",
+    "cybersecurity",
+    "threat-intelligence"
+  ],
+  "author": "James Henry, Jaimin Bhagat, Thomas Mason, Tristan Sharpe, Wesley Venters",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "dotenv": "^16.4.5",
+    "axios": "^1.7.7",
+    "better-sqlite3": "^11.5.0",
+    "zod": "^3.23.8",
+    "compression": "^1.7.4",
+    "express-rate-limit": "^7.4.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/node": "^22.7.5",
+    "@types/compression": "^1.7.5",
+    "@types/better-sqlite3": "^7.6.11",
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.1",
+    "eslint": "^9.12.0",
+    "prettier": "^3.3.3",
+    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/parser": "^8.8.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

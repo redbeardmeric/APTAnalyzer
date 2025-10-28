@@ -1,0 +1,28 @@
+{
+  "name": "RAPTOR - APT Threat Analysis",
+  "short_name": "RAPTOR",
+  "description": "Ranking Advanced Persistent Threat Ontological Report - MITRE ATT&CK Analysis Tool",
+  "theme_color": "#282C2E",
+  "background_color": "#282C2E",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

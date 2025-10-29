@@ -8,7 +8,7 @@ const router = Router();
  * GET /api/software
  * Get all software (malware and tools)
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (_req: Request, res: Response) => {
   try {
     const software = dataService.getSoftware();
     const response: ApiResponse<Software[]> = {
@@ -16,14 +16,14 @@ router.get('/', (req: Request, res: Response) => {
       data: software,
       timestamp: new Date().toISOString(),
     };
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     const response: ApiResponse<never> = {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     };
-    res.status(500).json(response);
+    return res.status(500).json(response);
   }
 });
 

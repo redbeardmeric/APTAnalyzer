@@ -1,8 +1,9 @@
 /**
  * Database Initialization Script
- * Fetches MITRE ATT&CK data from TAXII server and populates the database
+ * Loads MITRE ATT&CK data from GitHub repository (to avoid TAXII rate limits)
+ * and populates the database
  */
-import taxiiClient from '../services/taxiiClient';
+import stixLoader from '../services/stixLoader';
 import database from '../services/database';
 
 async function initializeDatabase() {
@@ -22,10 +23,30 @@ async function initializeDatabase() {
       process.exit(0);
     }
 
-    // Fetch data from TAXII server
-    console.log('\n📡 Fetching Enterprise ATT&CK data from TAXII server...');
-    const bundle = await taxiiClient.fetchEnterpriseAttack();
-    const version = taxiiClient.getAttackVersion(bundle);
+    console.log('\n📦 Loading Enterprise ATT&CK data...');
+    console.log('   Source: MITRE CTI GitHub Repository');
+    console.log('   (Avoids TAXII 2.1 rate limits)');
+
+    let bundle;
+
+    // Try to load from cache first
+    console.log('\n1️⃣  Checking cache...');
+    bundle = stixLoader.loadFromCache();
+
+    // If not in cache, download from GitHub
+    if (!bundle) {
+      console.log('   No cache found. Downloading from GitHub...');
+      console.log('\n2️⃣  Downloading from GitHub...');
+      bundle = await stixLoader.downloadFromGitHub();
+
+      // Save to cache for future use
+      console.log('\n3️⃣  Caching bundle for future use...');
+      await stixLoader.saveToCache(bundle);
+    } else {
+      console.log('   ✓ Using cached bundle');
+    }
+
+    const version = stixLoader.getAttackVersion(bundle);
 
     console.log(`\n✓ Fetched ${bundle.objects.length} objects`);
     console.log(`  ATT&CK Version: ${version}`);

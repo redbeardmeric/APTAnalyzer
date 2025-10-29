@@ -4,11 +4,11 @@ Node.js + TypeScript backend for the RAPTOR PWA application.
 
 ## Features
 
-- **TAXII 2.1 Client** - Fetches data from MITRE ATT&CK official server
+- **GitHub + TAXII Data Loading** - Primary source from GitHub (no rate limits), TAXII fallback
 - **SQLite Caching** - Fast local database for offline capability
 - **RESTful API** - Clean, documented endpoints
 - **Type-Safe** - Full TypeScript coverage
-- **Auto-Update** - Configurable automatic data updates
+- **Smart Updates** - Intelligent version checking and update system
 
 ## Quick Start
 
@@ -27,9 +27,33 @@ npm run db:init
 ```
 
 This will:
-1. Connect to `https://attack-taxii.mitre.org`
-2. Fetch Enterprise ATT&CK collection
+1. Download Enterprise ATT&CK bundle from GitHub repository
+2. Cache bundle locally for fast re-initialization
 3. Parse and store in SQLite database
+
+**Why GitHub?** TAXII 2.1 has strict rate limits (10 requests per 10 minutes). We use the official MITRE CTI GitHub repository for initial data loading and periodic updates, falling back to TAXII only when needed.
+
+### Check Database Version
+
+Check current database version and update status:
+
+```bash
+npm run db:check
+```
+
+### Update Database
+
+Update to latest ATT&CK version:
+
+```bash
+npm run db:update
+```
+
+This will:
+1. Check GitHub for latest release
+2. Download if newer version available
+3. Fallback to TAXII if GitHub fails
+4. Update database with new data
 
 ### Development
 
@@ -130,8 +154,9 @@ CORS_ORIGINS=http://localhost:5173,http://localhost:3000
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Compile TypeScript to JavaScript
 - `npm start` - Run production server
-- `npm run db:init` - Initialize database with ATT&CK data
-- `npm run db:update` - Update database to latest ATT&CK version
+- `npm run db:init` - Initialize database with ATT&CK data (from GitHub)
+- `npm run db:update` - Update database to latest ATT&CK version (GitHub → TAXII fallback)
+- `npm run db:check` - Check current database version and update status
 - `npm run lint` - Run ESLint
 - `npm run format` - Format code with Prettier
 
@@ -165,6 +190,7 @@ src/
 │   ├── analysisService.ts   # RAPTOR algorithm
 │   ├── dataService.ts       # Database queries
 │   ├── database.ts          # SQLite connection
+│   ├── stixLoader.ts        # GitHub STIX bundle loader
 │   └── taxiiClient.ts       # TAXII 2.1 client
 ├── types/           # TypeScript definitions
 │   ├── api.ts       # API response types
@@ -174,20 +200,39 @@ src/
 
 ## Data Flow
 
+### Initial Load & Updates
+```
+GitHub Repository (Primary)
+  mitre/cti/enterprise-attack.json
+        ↓
+   stixLoader.ts
+        ↓
+    cache/*.json (local cache)
+        ↓
+    database.ts (SQLite)
+```
+
+### TAXII Fallback (if GitHub fails)
 ```
 TAXII Server (MITRE)
+  attack-taxii.mitre.org
         ↓
    taxiiClient.ts
         ↓
-    database.ts (SQLite cache)
-        ↓
-   dataService.ts
-        ↓
-  analysisService.ts
+    database.ts (SQLite)
+```
+
+### API Request Flow
+```
+Frontend (React PWA)
         ↓
    routes/*.ts (Express)
         ↓
-    Frontend (React PWA)
+  analysisService.ts
+        ↓
+   dataService.ts
+        ↓
+    database.ts (SQLite)
 ```
 
 ## Technologies

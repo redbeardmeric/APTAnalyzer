@@ -15,6 +15,10 @@ build/
 database/*.db
 database/*.sqlite
 
+# Cache
+cache/
+*.json.cache
+
 # Environment
 .env
 .env.local

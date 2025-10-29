@@ -236,7 +236,7 @@ export class DatabaseService {
     });
 
     console.log('Storing bundle in database...');
-    transaction(bundle.objects);
+    transaction(bundle.objects as any);
 
     // Update metadata
     this.setMetadata('attack_version', attackVersion);

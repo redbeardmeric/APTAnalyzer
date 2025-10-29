@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../store/useAppStore';
-import { ChevronRight, ExternalLink } from 'lucide-react';
-import { getMatchTier, getPercentageColor, formatPercentage } from '../../lib/utils';
+import { ChevronRight } from 'lucide-react';
+import { getPercentageColor, formatPercentage } from '../../lib/utils';
 import type { AnalysisResult } from '../../types';
 
 export default function ResultsPanel() {

@@ -245,7 +245,6 @@ export class DataService {
    * Get data source info
    */
   getDataSourceInfo(): DataSourceInfo {
-    const db = database.getDb();
     const stats = database.getStats();
 
     return {

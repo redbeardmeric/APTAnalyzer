@@ -10,7 +10,8 @@
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "db:init": "tsx src/scripts/initDb.ts",
-    "db:update": "tsx src/scripts/updateData.ts"
+    "db:update": "tsx src/scripts/updateData.ts",
+    "db:check": "tsx src/scripts/checkVersion.ts"
   },
   "keywords": [
     "mitre",

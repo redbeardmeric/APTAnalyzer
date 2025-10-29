@@ -95,7 +95,7 @@ export class TaxiiClient {
    */
   getAttackVersion(bundle: StixBundle): string {
     // Look for x-mitre-collection object which contains version info
-    const collection = bundle.objects.find((obj: any) => obj.type === 'x-mitre-collection');
+    const collection: any = bundle.objects.find((obj: any) => obj.type === 'x-mitre-collection');
     return collection?.['x_mitre_version'] || 'unknown';
   }
 }

@@ -10,8 +10,8 @@ import dataSourceRouter from './dataSource';
 const router = Router();
 
 // Health check
-router.get('/health', (req, res) => {
-  res.json({
+router.get('/health', (_req, res) => {
+  return res.json({
     success: true,
     message: 'RAPTOR API is running',
     timestamp: new Date().toISOString(),

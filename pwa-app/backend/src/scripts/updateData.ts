@@ -1,7 +1,13 @@
 /**
  * Database Update Script
- * Updates MITRE ATT&CK data from TAXII server
+ * Updates MITRE ATT&CK data from GitHub (preferred) or TAXII server (fallback)
+ *
+ * Strategy:
+ * 1. Check GitHub for latest release version
+ * 2. Download from GitHub if available (no rate limits)
+ * 3. Fallback to TAXII if GitHub fails (subject to 10 requests/10 min limit)
  */
+import stixLoader from '../services/stixLoader';
 import taxiiClient from '../services/taxiiClient';
 import database from '../services/database';
 
@@ -18,12 +24,35 @@ async function updateDatabase() {
     console.log(`  ATT&CK Version: ${currentVersion || 'none'}`);
     console.log(`  Last Updated: ${lastUpdated || 'never'}`);
 
-    // Fetch latest data
-    console.log('\n📡 Fetching latest Enterprise ATT&CK data from TAXII server...');
-    const bundle = await taxiiClient.fetchEnterpriseAttack();
-    const latestVersion = taxiiClient.getAttackVersion(bundle);
+    let bundle;
+    let latestVersion;
+    let source = 'GitHub';
 
-    console.log(`\n✓ Fetched ${bundle.objects.length} objects`);
+    // Try GitHub first (no rate limits)
+    try {
+      console.log('\n1️⃣  Checking for updates from GitHub...');
+      const releaseInfo = await stixLoader.getLatestReleaseInfo();
+      console.log(`   Latest GitHub release: ${releaseInfo.version}`);
+      console.log(`   Published: ${releaseInfo.publishedAt}`);
+
+      console.log('\n2️⃣  Downloading latest bundle from GitHub...');
+      bundle = await stixLoader.downloadFromGitHub();
+      latestVersion = stixLoader.getAttackVersion(bundle);
+
+      // Update cache
+      console.log('\n3️⃣  Updating cache...');
+      await stixLoader.saveToCache(bundle);
+    } catch (githubError) {
+      console.warn(`\n⚠️  GitHub download failed: ${githubError}`);
+      console.log('\n4️⃣  Falling back to TAXII server...');
+      console.log('   ⚠️  Note: TAXII 2.1 has rate limits (10 requests per 10 minutes)');
+
+      source = 'TAXII';
+      bundle = await taxiiClient.fetchEnterpriseAttack();
+      latestVersion = taxiiClient.getAttackVersion(bundle);
+    }
+
+    console.log(`\n✓ Fetched ${bundle.objects.length} objects from ${source}`);
     console.log(`  Latest ATT&CK Version: ${latestVersion}`);
 
     if (currentVersion === latestVersion) {

@@ -17,14 +17,14 @@ router.get('/', (req: Request, res: Response) => {
       data: techniques,
       timestamp: new Date().toISOString(),
     };
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     const response: ApiResponse<never> = {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     };
-    res.status(500).json(response);
+    return res.status(500).json(response);
   }
 });
 
@@ -50,14 +50,14 @@ router.get('/:id', (req: Request, res: Response) => {
       data: technique,
       timestamp: new Date().toISOString(),
     };
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     const response: ApiResponse<never> = {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     };
-    res.status(500).json(response);
+    return res.status(500).json(response);
   }
 });
 
@@ -84,14 +84,14 @@ router.get('/:id/mitigations', (req: Request, res: Response) => {
       data: mitigations,
       timestamp: new Date().toISOString(),
     };
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     const response: ApiResponse<never> = {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     };
-    res.status(500).json(response);
+    return res.status(500).json(response);
   }
 });
 

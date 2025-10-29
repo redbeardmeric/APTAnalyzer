@@ -8,7 +8,7 @@ const router = Router();
  * GET /api/groups
  * Get all groups
  */
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (_req: Request, res: Response) => {
   try {
     const groups = dataService.getGroups();
     const response: ApiResponse<Group[]> = {
@@ -16,14 +16,14 @@ router.get('/', (req: Request, res: Response) => {
       data: groups,
       timestamp: new Date().toISOString(),
     };
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     const response: ApiResponse<never> = {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     };
-    res.status(500).json(response);
+    return res.status(500).json(response);
   }
 });
 
@@ -49,14 +49,14 @@ router.get('/:id', (req: Request, res: Response) => {
       data: group,
       timestamp: new Date().toISOString(),
     };
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     const response: ApiResponse<never> = {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     };
-    res.status(500).json(response);
+    return res.status(500).json(response);
   }
 });
 
@@ -83,14 +83,14 @@ router.get('/:id/techniques', (req: Request, res: Response) => {
       data: techniques,
       timestamp: new Date().toISOString(),
     };
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     const response: ApiResponse<never> = {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     };
-    res.status(500).json(response);
+    return res.status(500).json(response);
   }
 });
 
@@ -117,14 +117,14 @@ router.get('/:id/software', (req: Request, res: Response) => {
       data: software,
       timestamp: new Date().toISOString(),
     };
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     const response: ApiResponse<never> = {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     };
-    res.status(500).json(response);
+    return res.status(500).json(response);
   }
 });
 
